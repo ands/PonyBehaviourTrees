@@ -1,0 +1,91 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{94A67293-DA8E-4B5F-9477-3DC78529F440}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <RootNamespace>PBT</RootNamespace>
+    <AssemblyName>PBT</AssemblyName>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug</OutputPath>
+    <DefineConstants>DEBUG;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'CI|AnyCPU'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\CI\</OutputPath>
+    <Optimize>true</Optimize>
+    <DebugType>full</DebugType>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Decorators\While.cs" />
+    <Compile Include="Decorators\If.cs" />
+    <Compile Include="ILogger.cs" />
+    <Compile Include="IImpulseHandler.cs" />
+    <Compile Include="ImpulseHandle.cs" />
+    <Compile Include="VariableStorage.cs" />
+    <Compile Include="TypeExporter.cs" />
+    <Compile Include="Compatibility.cs" />
+    <Compile Include="CustomEnum.cs" />
+    <Compile Include="Decorators\GlobalSemaphore.cs" />
+    <Compile Include="Decorators\Filter.cs" />
+    <Compile Include="Decorators\DuringImpulse.cs" />
+    <Compile Include="Decorators\SlowDown.cs" />
+    <Compile Include="Decorators\OnImpulse.cs" />
+    <Compile Include="Decorators\LocalSemaphore.cs" />
+    <Compile Include="Expression.cs" />
+    <Compile Include="Extensions.cs" />
+    <Compile Include="LeafTasks\Log.cs" />
+    <Compile Include="LeafTasks\Reference.cs" />
+    <Compile Include="LeafTasks\TODO.cs" />
+    <Compile Include="ParentTasks\PickRandom.cs" />
+    <Compile Include="ParentTasks\RandomOrder.cs" />
+    <Compile Include="ParentTasks\Prioritize.cs" />
+    <Compile Include="TaskContext.cs" />
+    <Compile Include="LeafTasks\Action.cs" />
+    <Compile Include="ParentTasks\ParallelOr.cs" />
+    <Compile Include="Task.cs" />
+    <Compile Include="LeafTask.cs" />
+    <Compile Include="ParentTask.cs" />
+    <Compile Include="TaskDecorator.cs" />
+    <Compile Include="Parser.cs" />
+    <Compile Include="LeafTasks\Pause.cs" />
+    <Compile Include="Decorators\Repeat.cs" />
+    <Compile Include="Decorators\IgnoreConditions.cs" />
+    <Compile Include="Decorators\Duration.cs" />
+    <Compile Include="Decorators\Interval.cs" />
+    <Compile Include="Decorators\Forever.cs" />
+    <Compile Include="ParentTasks\ParallelAnd.cs" />
+    <Compile Include="ParentTasks\Option.cs" />
+    <Compile Include="ParentTasks\Sequence.cs" />
+    <Compile Include="LeafTasks\Condition.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup />
+</Project>
