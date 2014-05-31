@@ -1,44 +1,25 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
 namespace PBTExample
 {
-    public enum ActorImpulses
-    {
-        Collision
-    }
-
-    public class Actor
-    {
-        public float X, Y;
-        public float Size;
-        public Brush Brush;
-        public PBT.LeafTasks.Reference<Actor> AI;
-
-        public Actor(Point position)
-        {
-            X = position.X;
-            Y = position.Y;
-            Size = 20;
-            Brush = new SolidBrush(Color.FromArgb(position.X % 255, (128 + position.X) % 255, Math.Max(0, 255 - position.Y)));
-            AI = PBT.Parser.Load<Actor, ActorImpulses>(".", "AI", this, PBTConfig.Usings, PBTConfig.Logger);
-        }
-
-        public void Draw(Graphics g, double time)
-        {
-            AI.Update(time);
-            g.FillEllipse(Brush, X - Size, Y - Size, 2 * Size, 2 * Size);
-        }
-    }
-
+    /// <summary>
+    /// Our simulation class. It contains some actors that should all act independently.
+    /// </summary>
     public class Simulation
     {
+        /// <summary>
+        /// Holds our independant actors.
+        /// </summary>
         public Actor[] actors = new Actor[64];
 
         private DateTime start;
 
+        /// <summary>
+        /// Instantiates our actors.
+        /// </summary>
+        /// <param name="control"></param>
         public Simulation(Control control)
         {
             for (int i = 0; i < actors.Length; i++)
@@ -47,12 +28,18 @@ namespace PBTExample
             start = DateTime.Now;
         }
 
-        public void Draw(Graphics g)
+        /// <summary>
+        /// Gets executed each frame.
+        /// Sends collision events and updates actors.
+        /// </summary>
+        /// <param name="g">GDI+ Graphics context to draw to.</param>
+        public void Update(Graphics g)
         {
             double time = (DateTime.Now - start).TotalSeconds;
 
             for (int i = 0; i < actors.Length; i++)
             {
+                // send collision impulses to colliding actors
                 for (int j = i + 1; j < actors.Length; j++)
                 {
                     float dx = actors[i].X - actors[j].X;
@@ -65,7 +52,8 @@ namespace PBTExample
                     }
                 }
 
-                actors[i].Draw(g, time);
+                // let all actors do their thing
+                actors[i].Update(g, time);
             }
         }
     }

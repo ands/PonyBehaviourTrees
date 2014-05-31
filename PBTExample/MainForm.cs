@@ -4,10 +4,16 @@ using System.Windows.Forms;
 
 namespace PBTExample
 {
+    /// <summary>
+    /// Our main form that represents our game window.
+    /// </summary>
     public partial class MainForm : Form
     {
         Simulation simulation;
 
+        /// <summary>
+        /// Constructs our double buffered main form that will show the simulation.
+        /// </summary>
         public MainForm()
         {
             InitializeComponent();
@@ -23,7 +29,7 @@ namespace PBTExample
         private void MainForm_Paint(object sender, PaintEventArgs e)
         {
             e.Graphics.SmoothingMode = SmoothingMode.AntiAlias;
-            simulation.Draw(e.Graphics);
+            simulation.Update(e.Graphics);
         }
 
         private void editPBTToolStripMenuItem_Click(object sender, EventArgs e)

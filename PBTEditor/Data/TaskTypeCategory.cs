@@ -1,12 +1,21 @@
-using System;
-using System.Xml;
 using System.Collections.Generic;
+using System.Xml;
 
 namespace PBTEditor.Data
 {
+    /// <summary>
+    /// The data representation of a category of tasks.
+    /// </summary>
 	public class TaskTypeCategory
 	{
+        /// <summary>
+        /// The name of the category.
+        /// </summary>
 		public string Name;
+
+        /// <summary>
+        /// The task types that belong to this category.
+        /// </summary>
 		public List<TaskType> TaskTypes;
 		
 		internal TaskTypeCategory (XmlTextReader reader)

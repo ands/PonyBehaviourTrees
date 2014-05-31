@@ -1,34 +1,38 @@
 using System;
 using System.Collections.Generic;
-using System.Xml;
-using System.Reflection;
 using System.Linq;
+using System.Xml;
 
 namespace PBTEditor.Data
 {
-	public class TaskTypeParameter
-	{
-		public string Name;
-		public string Type;
-		public string ShortType;
-		public EnumType EnumType;
-		public bool IsEnum { get { return EnumType != null; } }
-		
-		public TaskTypeParameter(string name, string type)
-		{
-			Name = name;
-			Type = type;
-			ShortType = Type.Substring(Type.LastIndexOf(".") + 1).TrimEnd(']');
-		}
-	}
-	
+    /// <summary>
+    /// The data representation of a task type.
+    /// </summary>
 	public class TaskType
 	{
+        /// <summary>
+        /// Long type name for finding the correct type from all the loaded assemblies.
+        /// </summary>
 		public string TypeName;
+
+        /// <summary>
+        /// Short type name.
+        /// </summary>
 		public string Name;
+
+        /// <summary>
+        /// The parameters for this task type.
+        /// </summary>
 		public List<TaskTypeParameter> Parameters = new List<TaskTypeParameter>();
+
+        /// <summary>
+        /// The category that this task type belongs to.
+        /// </summary>
 		public TaskTypeCategory Category;
 		
+        /// <summary>
+        /// Default parameter values for long type names.
+        /// </summary>
 		public static Dictionary<string, string> DefaultValues = new Dictionary<string, string>();
 		
 		internal TaskType(XmlTextReader reader, TaskTypeCategory category)
@@ -45,11 +49,20 @@ namespace PBTEditor.Data
 			}
 		}
 		
+        /// <summary>
+        /// Creates an instance of this task type with the specified parameter values.
+        /// </summary>
+        /// <param name="parameterValues">The parameter values.</param>
+        /// <returns>Returns a new instace of this type.</returns>
 		public Task Create(params string[] parameterValues)
 		{
 			return new Task(this, null, parameterValues);
 		}
 		
+        /// <summary>
+        /// Creates an instance of this task type with default parameter values.
+        /// </summary>
+        /// <returns>Returns a new instace of this type.</returns>
 		public Task Create()
 		{
 			var p = new string[Parameters.Count];
@@ -68,6 +81,10 @@ namespace PBTEditor.Data
 			return new Task(this, null, p);
 		}
 		
+        /// <summary>
+        /// Shows the task constructor information.
+        /// </summary>
+        /// <returns>Returns the task constructor information.</returns>
 		public override string ToString()
 		{
 			string paramString = string.Join(", ", Parameters.Select(p => p.Type + " " + p.Name).ToArray());

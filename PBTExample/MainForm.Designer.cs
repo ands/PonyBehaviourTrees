@@ -1,5 +1,8 @@
 ﻿namespace PBTExample
 {
+    /// <summary>
+    /// Our main form that represents our game window.
+    /// </summary>
     partial class MainForm
     {
         /// <summary>

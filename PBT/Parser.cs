@@ -9,6 +9,9 @@ using System.Xml;
 
 namespace PBT
 {
+    /// <summary>
+    /// The pbt parser. Use it to load a pbt file.
+    /// </summary>
 	public static class Parser
     {
         // tries to resolve a type from its name.
@@ -234,8 +237,18 @@ namespace PBT
 			return task;
 		}
 
-        // creates a reference to a pbt file
-        public static LeafTasks.Reference<DataType> Load<DataType, ImpulseType>(string directory, string name, DataType data, string[] usings, ILogger logger)
+        /// <summary>
+        /// Loads a pbt file.
+        /// </summary>
+        /// <typeparam name="DataType">The entity type that should be controlled by the pbt.</typeparam>
+        /// <typeparam name="ImpulseType">The enum type that contains the possible impulses that the pbt should handle.</typeparam>
+        /// <param name="directory">The base directory that contains the pbt file to load and its referenced pbt files.</param>
+        /// <param name="name">The name of the pbt file inside the base directory without the extension.</param>
+        /// <param name="data">The entity that should be controlled by the pbt.</param>
+        /// <param name="usings">A list of csharp usings for the pbt scripting expressions.</param>
+        /// <param name="logger">A logger for info, warning and error messages that can be logged from the pbt.</param>
+        /// <returns>Returns the loaded pbt instance which has to be updated frequently to execute the pbt.</returns>
+        public static RootTask<DataType> Load<DataType, ImpulseType>(string directory, string name, DataType data, string[] usings, ILogger logger)
         {
             return new LeafTasks.Reference<DataType>(
                 new TaskContext<DataType>(data, typeof(ImpulseType), usings, directory, logger),

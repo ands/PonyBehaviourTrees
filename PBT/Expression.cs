@@ -9,6 +9,10 @@ using Microsoft.CSharp;
 
 namespace PBT
 {
+    /// <summary>
+    /// An expression that does not return anything.
+    /// Use this class to compile expressions.
+    /// </summary>
     public class Expression
     {
         private static string codeTemplate = @"{0}{1} class ExpressionCode {{ public {2} Execute(object[] executionParams) {{ {3}; }} }}";
@@ -105,7 +109,14 @@ namespace PBT
             return results.CompiledAssembly.CreateInstance("ExpressionCode");
         }
 
-
+        /// <summary>
+        /// Compiles an expression that does not return anything.
+        /// </summary>
+        /// <param name="usings">The csharp usings for the code.</param>
+        /// <param name="expressionString">The csharp code.</param>
+        /// <param name="parameterNames">The list of variable names that will be set prior to executing the code.</param>
+        /// <param name="parameterValues">The list of variable values that will be set prior to executing the code.</param>
+        /// <returns>Returns the compiled expression.</returns>
         [DebuggerStepThrough]
         public static Expression Compile(string[] usings, string expressionString, string[] parameterNames, object[] parameterValues)
         {
@@ -119,6 +130,15 @@ namespace PBT
             return new Expression(expressionString, execute, parameterValues);
         }
 
+        /// <summary>
+        /// Compiles an expression that returns something.
+        /// </summary>
+        /// <typeparam name="ReturnType">The type of the return value.</typeparam>
+        /// <param name="usings">The csharp usings for the code.</param>
+        /// <param name="expressionString">The csharp code.</param>
+        /// <param name="parameterNames">The list of variable names that will be set prior to executing the code.</param>
+        /// <param name="parameterValues">The list of variable values that will be set prior to executing the code.</param>
+        /// <returns>Returns the compiled expression.</returns>
         [DebuggerStepThrough]
         public static Expression<ReturnType> Compile<ReturnType>(string[] usings, string expressionString, string[] parameterNames, object[] parameterValues)
         {
@@ -142,12 +162,22 @@ namespace PBT
             return new Expression<ReturnType>(expressionString, execute, parameterValues);
         }
 
-
+        /// <summary>
+        /// Creates a wrapper that behaves like an expression, but just returns the specified value.
+        /// </summary>
+        /// <typeparam name="ReturnType">The type of the return value.</typeparam>
+        /// <param name="result">The return value.</param>
+        /// <returns>Returns the specified value.</returns>
         public static Expression<ReturnType> WrapResult<ReturnType>(ReturnType result)
         {
             return new ResultExpression<ReturnType>(result);
         }
 
+        /// <summary>
+        /// If called with typeof(Expression&lt;ReturnValue&gt;), returns typeof(ReturnValue); otherwise, the specified type.
+        /// </summary>
+        /// <param name="type">The expression type to unwrap.</param>
+        /// <returns>Returns typeof(ReturnValue) if called with typeof(Expression&lt;ReturnValue&gt;); otherwise, the specified type.</returns>
         public static Type UnwrapType(Type type)
         {
             if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Expression<>))
@@ -169,6 +199,9 @@ namespace PBT
             this.parameterValues = parameterValues;
         }
 
+        /// <summary>
+        /// Executes the compiled code of the expression.
+        /// </summary>
         public void Execute()
         {
             try
@@ -181,12 +214,20 @@ namespace PBT
             }
         }
 
+        /// <summary>
+        /// Shows the source code of the expression.
+        /// </summary>
+        /// <returns>Returns the source code of the expression.</returns>
         public override string ToString()
         {
             return code;
         }
     }
 
+    /// <summary>
+    /// An expression that returns something.
+    /// </summary>
+    /// <typeparam name="ReturnType">The type of the return value.</typeparam>
     public class Expression<ReturnType>
     {
         private string code;
@@ -204,6 +245,10 @@ namespace PBT
             this.parameterValues = parameterValues;
         }
 
+        /// <summary>
+        /// Executes the compiled code of the expression.
+        /// </summary>
+        /// <returns>Returns the return value of the execution.</returns>
         public virtual ReturnType Execute()
         {
             try
@@ -217,11 +262,20 @@ namespace PBT
             }
         }
 
+        /// <summary>
+        /// Implicit ReturnType evaluator.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <returns></returns>
         public static implicit operator ReturnType(Expression<ReturnType> value)
         {
             return value.Execute();
         }
 
+        /// <summary>
+        /// Shows the source code of the expression.
+        /// </summary>
+        /// <returns>Returns the source code of the expression.</returns>
         public override string ToString()
         {
             return code;

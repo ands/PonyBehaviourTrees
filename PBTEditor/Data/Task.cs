@@ -1,17 +1,33 @@
 using System;
 using System.Collections.Generic;
 using System.Xml;
-using System.Reflection;
 
 namespace PBTEditor.Data
 {
+    /// <summary>
+    /// The data representation of a task instance.
+    /// </summary>
 	public class Task
 	{
+        /// <summary>
+        /// The type of the task.
+        /// </summary>
 		public TaskType TaskType;
+
+        /// <summary>
+        /// The filled in parameter values.
+        /// </summary>
 		public string[] ParameterValues;
+
+        /// <summary>
+        /// The description for the task instance.
+        /// </summary>
 		public string Description;
+
+        /// <summary>
+        /// The list of subtasks in the pbt.
+        /// </summary>
 		public List<Task> Subtasks;
-		public bool Hidden = false;
 		
 		internal Task(TaskType type, string description = null, params string[] parameterValues)
 		{
@@ -89,6 +105,10 @@ namespace PBTEditor.Data
 				reader.Read();
 		}
 		
+        /// <summary>
+        /// Copies the subtree starting from this task instance.
+        /// </summary>
+        /// <returns>Returns a copy of the subtree starting from this task instance.</returns>
 		public Task DeepCopy()
 		{
 			string[] p = new string[ParameterValues.Length];
@@ -99,6 +119,10 @@ namespace PBTEditor.Data
 			return t;
 		}
 		
+        /// <summary>
+        /// Shows the available task construction information.
+        /// </summary>
+        /// <returns>Returns the available task construction information.</returns>
 		public override string ToString()
 		{
 			string[] pv = new string[TaskType.Parameters.Count];

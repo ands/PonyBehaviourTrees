@@ -6,6 +6,9 @@ using System.Xml;
 
 namespace PBT
 {
+    /// <summary>
+    /// Class that serializes all the loaded task types and used enums for the editor to use.
+    /// </summary>
 	public static class TypeExporter
     {
         // returns the name of a type without any generic parameter indicators
@@ -83,7 +86,12 @@ namespace PBT
             }
         }
 
-        // exports all task types from the three categories and the relevant enum types for the editor into an xml writer
+        /// <summary>
+        /// Serializes all loaded task types from the three categories and the relevant enum types for the editor into an xml writer.
+        /// </summary>
+        /// <param name="dataType">The entity type that the tasks need to be compatible with.</param>
+        /// <param name="impulseType">The impulse enum type to export.</param>
+        /// <param name="writer">The xml writer to serialize to.</param>
         public static void ExportAllTaskTypes(Type dataType, Type impulseType, XmlTextWriter writer)
         {
             Assembly[] assemblies = System.AppDomain.CurrentDomain.GetAssemblies();
@@ -109,7 +117,12 @@ namespace PBT
             writer.WriteEndDocument();
         }
 
-        // exports all task types from the three categories and the relevant enum types for the editor into an xml file
+        /// <summary>
+        /// Serializes all loaded task types from the three categories and the relevant enum types for the editor into a file.
+        /// </summary>
+        /// <param name="dataType">The entity type that the tasks need to be compatible with.</param>
+        /// <param name="impulseType">The impulse enum type to export.</param>
+        /// <param name="filename">The file to serialize to.</param>
 		public static void ExportAllTaskTypes(Type dataType, Type impulseType, string filename)
 		{
 			XmlTextWriter writer = new XmlTextWriter(filename, Encoding.UTF8);

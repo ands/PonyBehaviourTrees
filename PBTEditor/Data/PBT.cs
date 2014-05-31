@@ -1,18 +1,18 @@
-using System;
-using System.Collections.Generic;
-using System.Xml;
 using System.Text;
+using System.Xml;
 
 namespace PBTEditor.Data
 {
-	public class TaskTypes
-	{
-		public List<TaskTypeCategory> TaskTypeCategories = new List<TaskTypeCategory>();
-		public List<EnumType> EnumTypes = new List<EnumType>();
-	}
-	
+    /// <summary>
+    /// Static methods to work with the pbt type data representations.
+    /// </summary>
 	public static class PBT
 	{
+        /// <summary>
+        /// Read task types from an xml reader.
+        /// </summary>
+        /// <param name="reader">The xml reader.</param>
+        /// <returns>Returns the task types read from the xml reader.</returns>
 		public static TaskTypes GetTaskTypes(XmlTextReader reader)
 		{
 			TaskTypes tt = new TaskTypes();
@@ -41,6 +41,11 @@ namespace PBTEditor.Data
 			return tt;
 		}
 		
+        /// <summary>
+        /// Read task types from a file.
+        /// </summary>
+        /// <param name="filename">The file.</param>
+        /// <returns>Returns the task types read from the file.</returns>
 		public static TaskTypes GetTaskTypes(string filename)
 		{
 			XmlTextReader reader = new XmlTextReader(filename);
@@ -49,11 +54,21 @@ namespace PBTEditor.Data
 			return tt;
 		}
 		
+        /// <summary>
+        /// Serializes a pbt and writes it to an xml writer.
+        /// </summary>
+        /// <param name="writer">The xml writer.</param>
+        /// <param name="task">The root task of the pbt.</param>
 		public static void Serialize(XmlTextWriter writer, Task task)
 		{
 			task.Serialize(writer);
 		}
 		
+        /// <summary>
+        /// Serializes a pbt and writes it to a file.
+        /// </summary>
+        /// <param name="filename">The file.</param>
+        /// <param name="task">The root task of the pbt.</param>
 		public static void Serialize(string filename, Task task)
 		{
 			XmlTextWriter writer = new XmlTextWriter(filename, Encoding.UTF8);
@@ -65,11 +80,23 @@ namespace PBTEditor.Data
 			writer.Close();
 		}
 
+        /// <summary>
+        /// Deserializes a pbt from an xml reader.
+        /// </summary>
+        /// <param name="reader">The xml reader.</param>
+        /// <param name="types">The existing task types.</param>
+        /// <returns>Returns the pbt root task.</returns>
 		public static Task Deserialize(XmlTextReader reader, TaskTypes types)
 		{
 			return new Task(reader, types);
 		}
 		
+        /// <summary>
+        /// Deserializes a pbt from a file.
+        /// </summary>
+        /// <param name="filename">The file.</param>
+        /// <param name="types">The existing task types.</param>
+        /// <returns>Returns the pbt root task.</returns>
 		public static Task Deserialize(string filename, TaskTypes types)
 		{
 			XmlTextReader reader = new XmlTextReader(filename);

@@ -11,16 +11,31 @@ using OpenTK.Graphics.OpenGL;
 
 namespace PBTEditor
 {
+    /// <summary>
+    /// The pbt editor control.
+    /// </summary>
 	public class PBTEditorControl : OpenTK.GLControl
 	{
-        public GLGui GLGui { get; private set; }
-        public GLScrollableControl TreeContainer { get; private set; }
-        public Data.TaskTypes TaskTypes;
-        public Data.Task RootTask;
-        public Data.Task Clipboard;
-
+        /// <summary>
+        /// A delegate that handles pbt updates.
+        /// </summary>
+        /// <param name="pbtName">The name of the pbt to update.</param>
+        /// <param name="pbtData">The new pbt source.</param>
+        /// <returns></returns>
         public delegate bool PBTUpdateHandler(string pbtName, byte[] pbtData);
+
+        /// <summary>
+        /// Is fired when the editor saves a pbt.
+        /// Should update all active instances of the specified pbt.
+        /// </summary>
         public event PBTUpdateHandler PBTUpdate;
+
+        internal GLScrollableControl TreeContainer { get; private set; }
+        internal Data.TaskTypes TaskTypes;
+        internal Data.Task RootTask;
+        internal Data.Task Clipboard;
+
+        GLGui glGui;
 
         Type dataType, impulseType;
         string pbtSearchPath;
@@ -30,6 +45,12 @@ namespace PBTEditor
         byte[] typesXML;
         string currentPBTName;
 
+        /// <summary>
+        /// Constructs the pbt editor.
+        /// </summary>
+        /// <param name="dataType">The type of the pbt-controlled entity.</param>
+        /// <param name="impulseType">The type of the impulse enum to use.</param>
+        /// <param name="pbtSearchPath">The pbt base path.</param>
 		public PBTEditorControl(Type dataType, Type impulseType, string pbtSearchPath) : base(new GraphicsMode(new ColorFormat(8, 8, 8, 8), 24, 0, 4))
 		{
 			this.Load += OnLoad;
@@ -41,7 +62,7 @@ namespace PBTEditor
             LoadPBTTypes();
 		}
 
-        public void UpdatePBTFileList()
+        private void UpdatePBTFileList()
         {
             MakeCurrent();
             fileList.Clear();
@@ -52,7 +73,7 @@ namespace PBTEditor
                 int l = pbtSearchPath.Length + 1;
                 var name = file.Replace('\\', '/').TrimStart('/');
                 name = name.Substring(l, name.Length - l - 4);
-                var fileLink = fileList.Add(new GLLinkLabel(GLGui) { Text = name, AutoSize = true });
+                var fileLink = fileList.Add(new GLLinkLabel(glGui) { Text = name, AutoSize = true });
                 fileLink.Click += (s, e) => ShowPBT(name);
             }
         }
@@ -108,9 +129,9 @@ namespace PBTEditor
         {
             TreeContainer.Clear();
             if (RootTask != null)
-                TreeContainer.Add(new PBTTaskTreeControl(GLGui, this, null, RootTask));
+                TreeContainer.Add(new PBTTaskTreeControl(glGui, this, null, RootTask));
             else
-                TreeContainer.Add(new PBTTaskBrowserForm(GLGui, this, task => { RootTask = task; UpdatePBT(); }, true, false));
+                TreeContainer.Add(new PBTTaskBrowserForm(glGui, this, task => { RootTask = task; UpdatePBT(); }, true, false));
         }
 
         private void SavePBT()
@@ -171,9 +192,9 @@ namespace PBTEditor
 		{
             MakeCurrent();
             MouseUp += (s, ev) => MakeCurrent(); // workaround for correct context switching (mouseclicks might change the gui directly)
-			GLGui = new GLGui(this);
+			glGui = new GLGui(this);
             
-            var verticalSplitter = GLGui.Add(new GLSplitLayout(GLGui)
+            var verticalSplitter = glGui.Add(new GLSplitLayout(glGui)
             {
                 Size = ClientSize,
                 SplitterPosition = 0.85f,
@@ -181,32 +202,32 @@ namespace PBTEditor
                 Anchor = GLAnchorStyles.All
             });
 
-            TreeContainer = verticalSplitter.Add(new GLScrollableControl(GLGui) { Anchor = GLAnchorStyles.All });
+            TreeContainer = verticalSplitter.Add(new GLScrollableControl(glGui) { Anchor = GLAnchorStyles.All });
             var pbtTreeControlSkin = TreeContainer.Skin;
             pbtTreeControlSkin.BackgroundColor = System.Drawing.Color.FromArgb(96, 96, 96);//glgui.Skin.FormActive.BackgroundColor;
-			pbtTreeControlSkin.BorderColor = GLGui.Skin.FormActive.BorderColor;
+			pbtTreeControlSkin.BorderColor = glGui.Skin.FormActive.BorderColor;
             TreeContainer.Skin = pbtTreeControlSkin;
 
-            var sidebarFlow = verticalSplitter.Add(new GLFlowLayout(GLGui) { FlowDirection = GLFlowDirection.TopDown });
+            var sidebarFlow = verticalSplitter.Add(new GLFlowLayout(glGui) { FlowDirection = GLFlowDirection.TopDown });
             var sidebarSkin = sidebarFlow.Skin;
-            sidebarSkin.BackgroundColor = GLGui.Skin.FormActive.BackgroundColor;
+            sidebarSkin.BackgroundColor = glGui.Skin.FormActive.BackgroundColor;
             sidebarFlow.Skin = sidebarSkin;
 
-            reload = sidebarFlow.Add(new GLButton(GLGui) { Text = "Reload", Enabled = false });
+            reload = sidebarFlow.Add(new GLButton(glGui) { Text = "Reload", Enabled = false });
             reload.Click += (s, ev) => ShowPBT(currentPBTName);
-            save = sidebarFlow.Add(new GLButton(GLGui) { Text = "Save", Enabled = false });
+            save = sidebarFlow.Add(new GLButton(glGui) { Text = "Save", Enabled = false });
             save.Click += (s, ev) => SavePBT();
-            create = sidebarFlow.Add(new GLButton(GLGui) { Text = "New" });
+            create = sidebarFlow.Add(new GLButton(glGui) { Text = "New" });
             create.Click += (s, ev) => CreatePBT();
 
-            var fileListTitle = sidebarFlow.Add(new GLLabel(GLGui) { Text = "Load:", AutoSize = true });
+            var fileListTitle = sidebarFlow.Add(new GLLabel(glGui) { Text = "Load:", AutoSize = true });
 
-            var fileListScrollable = sidebarFlow.Add(new GLScrollableControl(GLGui)
+            var fileListScrollable = sidebarFlow.Add(new GLScrollableControl(glGui)
             {
                 Size = new Size(sidebarFlow.InnerWidth, sidebarFlow.InnerHeight - fileListTitle.Outer.Bottom),
                 Anchor = GLAnchorStyles.All
             });
-            fileList = fileListScrollable.Add(new GLFlowLayout(GLGui) { FlowDirection = GLFlowDirection.TopDown, AutoSize = true });
+            fileList = fileListScrollable.Add(new GLFlowLayout(glGui) { FlowDirection = GLFlowDirection.TopDown, AutoSize = true });
             UpdatePBTFileList();
 
             Resize += (s, ev) => { MakeCurrent(); GL.Viewport(ClientSize); };
@@ -221,10 +242,15 @@ namespace PBTEditor
         private void OnRender(object sender, PaintEventArgs e)
 		{
             MakeCurrent();
-			GLGui.Render();
+			glGui.Render();
 			SwapBuffers();
 		}
 
+        /// <summary>
+        /// Allow to handle some input keys that are needed by GLGUI.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <returns></returns>
         protected override bool IsInputKey(Keys key)
         {
             switch (key)
