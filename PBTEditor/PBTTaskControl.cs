@@ -178,9 +178,35 @@ namespace PBTEditor
                 var parameter = Task.TaskType.Parameters[i];
                 parameterTitles[i] = Add(new GLLabel(Gui) { Text = parameter.ShortType + " " + parameter.Name + ":", AutoSize = true });
                 minInnerWidth = Math.Max(minInnerWidth, parameterTitles[i].Width);
-                /*if (p.IsEnum)
-                    ps[i] = EnumParameter(task, i);
-                else*/
+                if (parameter.IsEnum)
+                {
+                    var parameterValue = Add(new GLButton(Gui)
+                    {
+                        AutoSize = true,
+                        Text = Task.ParameterValues[i] ?? "",
+                    });
+                    parameterValue.Click += (s, e) =>
+                    {
+                        var t = Editor.TreeContainer.InnerSize;
+                        var p = Editor.TreeContainer.ScrollPosition;
+                        Editor.TreeContainer.Add(new PBTEnumForm(Gui, this, localIndex, parameterValue)
+                        {
+                            Location = new Point(p.X + t.Width / 2 - 200, p.Y + t.Height / 2 - 150)
+                        });
+                    };
+
+                    /*var parameterValue = Add(new GLOptions(Gui)
+                    {
+                        AutoSize = true,
+                        FlowDirection = GLFlowDirection.TopDown
+                    });
+                    for (int j = 0; j < parameter.EnumType.ValueNames.Length; j++)
+                        parameterValue.Add(new GLCheckBox(Gui) { Text = parameter.EnumType.ValueNames[j], AutoSize = true });
+                    parameterValue.Selection = (GLCheckBox)parameterValue.Controls.ElementAt(Array.IndexOf(parameter.EnumType.ValueNames, Task.ParameterValues[i]));
+                    parameterValue.Changed += (s, e) => Task.ParameterValues[localIndex] = parameterValue.Selection.Text;*/
+                    parameterValues[i] = parameterValue;
+                }
+                else
                 {
                     var parameterValue = Add(new GLTextBox(Gui)
                     {

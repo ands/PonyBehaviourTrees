@@ -38,15 +38,15 @@
   <ItemGroup>
     <Reference Include="GLGUI, Version=1.0.5245.4346, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\PBTEditor\lib\GLGUI.dll</HintPath>
+      <HintPath>..\lib\GLGUI.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\PBTEditor\lib\OpenTK.dll</HintPath>
+      <HintPath>..\lib\OpenTK.dll</HintPath>
     </Reference>
     <Reference Include="OpenTK.GLControl, Version=1.1.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\PBTEditor\lib\OpenTK.GLControl.dll</HintPath>
+      <HintPath>..\lib\OpenTK.GLControl.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -92,6 +92,10 @@
     <ProjectReference Include="..\PBTEditor\PBTEditor.csproj">
       <Project>{3FA22D64-EA5B-49E2-9DCA-4714CD92C050}</Project>
       <Name>PBTEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\PBTInspector\PBTInspector.csproj">
+      <Project>{66693740-2310-4CCB-BA14-57BF4E4F7AA4}</Project>
+      <Name>PBTInspector</Name>
     </ProjectReference>
     <ProjectReference Include="..\PBT\PBT.csproj">
       <Project>{94A67293-DA8E-4B5F-9477-3DC78529F440}</Project>

@@ -13,7 +13,7 @@ namespace PBT.Decorators
         private ImpulseHandle active;
         private string impulse;
         private Expression<string> sourceVariable;
-        private Expression<string> eventVariable;
+        private Expression<string> dataVariable;
 
         /// <summary>
         /// The constructor executed by the parser.
@@ -22,14 +22,14 @@ namespace PBT.Decorators
         /// <param name="task">The child task.</param>
         /// <param name="impulse">The impulse.</param>
         /// <param name="sourceVariable">The name of the variable that will contain the impulse source.</param>
-        /// <param name="eventVariable">The name of the variable that will contain the impulse event data.</param>
-        public OnImpulse(TaskContext<DataType> context, Task<DataType> task, Expression<string> impulse, Expression<string> sourceVariable, Expression<string> eventVariable)
+        /// <param name="dataVariable">The name of the variable that will contain the impulse data.</param>
+        public OnImpulse(TaskContext<DataType> context, Task<DataType> task, Expression<string> impulse, Expression<string> sourceVariable, Expression<string> dataVariable)
             : base(context, task)
 		{
             uint i = Convert.ToUInt32(Enum.Parse(context.ImpulseType, impulse));
             this.impulse = impulse;
             this.sourceVariable = sourceVariable;
-            this.eventVariable = eventVariable;
+            this.dataVariable = dataVariable;
 
             List<IImpulseHandler> handler;
             if (context.ImpulseHandler.TryGetValue(i, out handler))
@@ -60,9 +60,9 @@ namespace PBT.Decorators
                 string sourceName = sourceVariable;
                 if (sourceName.Length > 0)
                     Context.Variables[sourceName] = active.Source;
-                string eventName = eventVariable;
-                if (eventName.Length > 0)
-                    Context.Variables[eventName] = active.Data;
+                string dataName = dataVariable;
+                if (dataName.Length > 0)
+                    Context.Variables[dataName] = active.Data;
             } while (!Subtask.CheckConditions());
 
             return true;

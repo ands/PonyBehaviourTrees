@@ -43,5 +43,10 @@ namespace PBTExample
         {
             simulation = new Simulation(this);
         }
+
+        private void inspectPBTOfFirstActorToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            new PBTInspector.PBTInspectorForm<Actor, ActorImpulses>(simulation.actors[0].AI).Show();
+        }
     }
 }

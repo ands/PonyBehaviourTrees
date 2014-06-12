@@ -5,11 +5,11 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{3FA22D64-EA5B-49E2-9DCA-4714CD92C050}</ProjectGuid>
+    <ProjectGuid>{66693740-2310-4CCB-BA14-57BF4E4F7AA4}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PBTEditor</RootNamespace>
-    <AssemblyName>PBTEditor</AssemblyName>
+    <RootNamespace>PBTInspector</RootNamespace>
+    <AssemblyName>PBTInspector</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\PBTEditor.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\PBTInspector.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,7 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Release\PBTEditor.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\PBTInspector.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="GLGUI">
@@ -46,25 +46,17 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PBTEnumForm.cs" />
-    <Compile Include="Data\TaskTypeParameter.cs" />
-    <Compile Include="Data\TaskTypes.cs" />
-    <Compile Include="Data\EnumType.cs" />
-    <Compile Include="Data\PBT.cs" />
-    <Compile Include="Data\Task.cs" />
-    <Compile Include="Data\TaskType.cs" />
-    <Compile Include="Data\TaskTypeCategory.cs" />
-    <Compile Include="PBTDescriptionForm.cs" />
-    <Compile Include="PBTEditorControl.cs">
+    <Compile Include="LabelWriter.cs" />
+    <Compile Include="PBTImpulseFilterForm.cs" />
+    <Compile Include="PBTImpulseLogger.cs" />
+    <Compile Include="PBTInspectorControl.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="PBTEditorForm.cs">
+    <Compile Include="PBTInspectorForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="PBTTaskBrowserForm.cs" />
     <Compile Include="PBTTaskControl.cs" />
     <Compile Include="PBTTaskTreeControl.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

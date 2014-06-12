@@ -32,7 +32,7 @@ namespace PBT
             string path = Path.Combine(context.BaseDirectory, this.name + ".pbt");
             try
             {
-                rootTask = Parser.Parse(path, context);
+                rootTask = Parser.Parse(path, this.name, context);
             }
             catch (Exception e)
             {

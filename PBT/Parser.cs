@@ -117,7 +117,7 @@ namespace PBT
 
                 try
                 {
-                    var expression = ParseExpressionParameter<DataType>(context, type, textValue + string.Format(" /* Source: {0}, Line: {1} */", source, reader.LineNumber));
+                    var expression = ParseExpressionParameter<DataType>(context, type, textValue + string.Format("\n/* {0}, Line {1} */", source, reader.LineNumber));
                     if (expression != null)
                         parameters.Add(expression);
                     else
@@ -229,10 +229,10 @@ namespace PBT
         }
 
         // parses a pbt (sub)tree from an xml file
-        internal static Task<DataType> Parse<DataType>(string filename, TaskContext<DataType> context)
+        internal static Task<DataType> Parse<DataType>(string filename, string name, TaskContext<DataType> context)
 		{
 			XmlTextReader reader = new XmlTextReader(filename);
-			var task = Parse<DataType>(reader, filename, context);
+			var task = Parse<DataType>(reader, name, context);
 			reader.Close();
 			return task;
 		}

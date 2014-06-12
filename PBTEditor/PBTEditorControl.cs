@@ -191,7 +191,7 @@ namespace PBTEditor
         private void OnLoad(object sender, EventArgs e)
 		{
             MakeCurrent();
-            MouseUp += (s, ev) => MakeCurrent(); // workaround for correct context switching (mouseclicks might change the gui directly)
+            MouseUp += (s, ev) => { try { MakeCurrent(); } catch (GraphicsContextException) { } }; // workaround for correct context switching (mouseclicks might change the gui directly)
 			glGui = new GLGui(this);
             
             var verticalSplitter = glGui.Add(new GLSplitLayout(glGui)
@@ -204,7 +204,7 @@ namespace PBTEditor
 
             TreeContainer = verticalSplitter.Add(new GLScrollableControl(glGui) { Anchor = GLAnchorStyles.All });
             var pbtTreeControlSkin = TreeContainer.Skin;
-            pbtTreeControlSkin.BackgroundColor = System.Drawing.Color.FromArgb(96, 96, 96);//glgui.Skin.FormActive.BackgroundColor;
+            pbtTreeControlSkin.BackgroundColor = System.Drawing.Color.FromArgb(96, 96, 96);
 			pbtTreeControlSkin.BorderColor = glGui.Skin.FormActive.BorderColor;
             TreeContainer.Skin = pbtTreeControlSkin;
 
@@ -241,9 +241,16 @@ namespace PBTEditor
 
         private void OnRender(object sender, PaintEventArgs e)
 		{
-            MakeCurrent();
-			glGui.Render();
-			SwapBuffers();
+            try
+            {
+                MakeCurrent();
+                glGui.Render();
+                SwapBuffers();
+                Context.MakeCurrent(null);
+            }
+            catch(GraphicsContextException)
+            {
+            }
 		}
 
         /// <summary>
