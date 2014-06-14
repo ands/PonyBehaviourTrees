@@ -22,9 +22,9 @@ namespace PBTEditor
         private List<GLButton> addBelow = new List<GLButton>();
         private GLFlowLayout addBelowFlow;
 
-        private static GLFont monospaceFont, addButtonFont;
-        private static GLSkin.GLTextBoxSkin codeBoxActive, codeBoxDisabled, codeBoxEnabled, codeBoxHover;
-        private static GLSkin.GLButtonSkin addButtonPressed, addButtonDisabled, addButtonEnabled, addButtonHover;
+        private /*static*/ GLFont monospaceFont, addButtonFont;
+        private /*static*/ GLSkin.GLTextBoxSkin codeBoxActive, codeBoxDisabled, codeBoxEnabled, codeBoxHover;
+        private /*static*/ GLSkin.GLButtonSkin addButtonPressed, addButtonDisabled, addButtonEnabled, addButtonHover;
 
         public PBTTaskControl(GLGui gui, PBTEditorControl editor, PBTTaskTreeControl taskTreeControl, Data.Task task)
             : base(gui)

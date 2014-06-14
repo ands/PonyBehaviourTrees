@@ -192,7 +192,9 @@ namespace PBTEditor
 		{
             MakeCurrent();
             MouseUp += (s, ev) => { try { MakeCurrent(); } catch (GraphicsContextException) { } }; // workaround for correct context switching (mouseclicks might change the gui directly)
-			glGui = new GLGui(this);
+            KeyDown += (s, ev) => { try { MakeCurrent(); } catch (GraphicsContextException) { } };
+            KeyPress += (s, ev) => { try { MakeCurrent(); } catch (GraphicsContextException) { } };
+            glGui = new GLGui(this);
             
             var verticalSplitter = glGui.Add(new GLSplitLayout(glGui)
             {

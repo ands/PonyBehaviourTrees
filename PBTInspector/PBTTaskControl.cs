@@ -12,7 +12,7 @@ namespace PBTInspector
         private GLLabel title;
         private GLSkin.GLFlowLayoutSkin skin;
 
-        private static GLFont monospaceFont;
+        private /*static*/ GLFont monospaceFont;
 
         public PBTTaskControl(GLGui gui, PBT.Task<DataType> task, bool extended)
             : base(gui)
