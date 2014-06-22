@@ -6,6 +6,9 @@ It is based on the idea behind "Behaviour Trees" while also offering C# scriptin
 It comes with an easy to use editor library to play with and develop your behaviour trees while your game is running
 and an inspection library to see what's going on in your AI while it is executed.
 
+![PBT Editor](http://andsz.de/i/20140622030049456.png)
+![PBT Inspector](http://andsz.de/i/20140622030929222.png)
+
 
 Resources
 =========
@@ -22,6 +25,12 @@ Resources
 TODO
 ====
 
-- Make a few cool screenshots
 - Write: "Getting Started"
 - Write: "How to implement my own Tasks"
+
+
+Known Issues
+============
+
+- OpenGL context switching is used incorrectly somewhere. This is sometimes breaking the fonts if multiple inspector/editor windows were opened.
+- If a script can not be compiled anymore (during program start), it will throw an exception on each PBT instance that is using it. Not sure how to solve this...
