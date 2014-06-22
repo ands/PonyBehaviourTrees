@@ -22,7 +22,6 @@ Resources
 TODO
 ====
 
-- The example project is stupid; make a better one
 - Make a few cool screenshots
 - Write: "Getting Started"
 - Write: "How to implement my own Tasks"

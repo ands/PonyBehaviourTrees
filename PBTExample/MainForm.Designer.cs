@@ -34,7 +34,6 @@
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.restartToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editPBTToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.inspectPBTOfFirstActorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -42,8 +41,7 @@
             // 
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.restartToolStripMenuItem,
-            this.editPBTToolStripMenuItem,
-            this.inspectPBTOfFirstActorToolStripMenuItem});
+            this.editPBTToolStripMenuItem});
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(624, 24);
@@ -64,13 +62,6 @@
             this.editPBTToolStripMenuItem.Text = "Edit PBT";
             this.editPBTToolStripMenuItem.Click += new System.EventHandler(this.editPBTToolStripMenuItem_Click);
             // 
-            // inspectPBTOfFirstActorToolStripMenuItem
-            // 
-            this.inspectPBTOfFirstActorToolStripMenuItem.Name = "inspectPBTOfFirstActorToolStripMenuItem";
-            this.inspectPBTOfFirstActorToolStripMenuItem.Size = new System.Drawing.Size(150, 20);
-            this.inspectPBTOfFirstActorToolStripMenuItem.Text = "Inspect PBT of first Actor";
-            this.inspectPBTOfFirstActorToolStripMenuItem.Click += new System.EventHandler(this.inspectPBTOfFirstActorToolStripMenuItem_Click);
-            // 
             // MainForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -86,6 +77,7 @@
             this.Name = "MainForm";
             this.Text = "PBT Example";
             this.Paint += new System.Windows.Forms.PaintEventHandler(this.MainForm_Paint);
+            this.MouseUp += new System.Windows.Forms.MouseEventHandler(this.MainForm_MouseUp);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -98,7 +90,6 @@
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.ToolStripMenuItem restartToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem editPBTToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem inspectPBTOfFirstActorToolStripMenuItem;
     }
 }
 

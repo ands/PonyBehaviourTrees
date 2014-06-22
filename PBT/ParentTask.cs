@@ -25,6 +25,7 @@ namespace PBT
         /// <param name="subtasks">The children tasks.</param>
         public ParentTask(TaskContext<DataType> context, Task<DataType>[] subtasks) : base(context)
 		{
+            this.CurrentTask = subtasks[0];
             this.Subtasks = subtasks;
 		}
 

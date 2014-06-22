@@ -71,6 +71,7 @@ namespace PBTInspector
             var extended = sidebar.Add(new GLCheckBox(glGui) { Text = "extended view", Checked = true, AutoSize = true });
             extended.Changed += (s, ev) =>
             {
+                MakeCurrent();
                 TreeContainer.Clear();
                 TreeContainer.Add(new PBTTaskTreeControl<DataType>(glGui, Root.Root, extended.Checked));
             };

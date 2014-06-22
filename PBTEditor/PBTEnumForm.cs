@@ -40,7 +40,9 @@ namespace PBTEditor
             });
             for (int j = 0; j < valueNames.Length; j++)
                 parameterValue.Add(new GLCheckBox(Gui) { Text = valueNames[j], AutoSize = true });
-            parameterValue.Selection = (GLCheckBox)parameterValue.Controls.ElementAt(Array.IndexOf(valueNames, task.ParameterValues[parameterIndex]));
+            var selectionIndex = Array.IndexOf(valueNames, task.ParameterValues[parameterIndex]);
+            if (selectionIndex != -1)
+                parameterValue.Selection = (GLCheckBox)parameterValue.Controls.ElementAt(selectionIndex);
             parameterValue.Changed += (s, e) => task.ParameterValues[parameterIndex] = parameterControl.Text = parameterValue.Selection.Text;
 
             var ok = Add(new GLButton(gui)

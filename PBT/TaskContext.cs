@@ -18,7 +18,7 @@ namespace PBT
         /// <summary>
         /// The storage for csharp scripting variables.
         /// </summary>
-        public VariableStorage Variables = new VariableStorage();
+        public readonly VariableStorage Variables;
 
         /// <summary>
         /// The logger instance.
@@ -42,24 +42,18 @@ namespace PBT
         internal readonly string[] Usings;
         internal readonly string BaseDirectory;
 
-        internal TaskContext(DataType data, Type impulseType, string[] usings, string baseDirectory, ILogger logger)
+        internal TaskContext(DataType data, Type impulseType, string[] usings, string baseDirectory, ILogger logger, VariableStorage vars = null)
         {
             Log = logger;
             Data = data;
             Usings = usings;
             BaseDirectory = baseDirectory;
+            Variables = vars ?? new VariableStorage();
 
             if (!impulseType.IsEnum)
                 throw new InvalidOperationException("impulseType needs to be the Type of an enum.");
 
             this.ImpulseType = impulseType;
-        }
-
-        internal void ResetForUpdate()
-        {
-            LocalSemaphores.Clear();
-            // TODO: release global semaphores that were entered in the old tree.
-            ImpulseHandler.Clear();
         }
 
         /// <summary>

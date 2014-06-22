@@ -194,16 +194,6 @@ namespace PBTEditor
                             Location = new Point(p.X + t.Width / 2 - 200, p.Y + t.Height / 2 - 150)
                         });
                     };
-
-                    /*var parameterValue = Add(new GLOptions(Gui)
-                    {
-                        AutoSize = true,
-                        FlowDirection = GLFlowDirection.TopDown
-                    });
-                    for (int j = 0; j < parameter.EnumType.ValueNames.Length; j++)
-                        parameterValue.Add(new GLCheckBox(Gui) { Text = parameter.EnumType.ValueNames[j], AutoSize = true });
-                    parameterValue.Selection = (GLCheckBox)parameterValue.Controls.ElementAt(Array.IndexOf(parameter.EnumType.ValueNames, Task.ParameterValues[i]));
-                    parameterValue.Changed += (s, e) => Task.ParameterValues[localIndex] = parameterValue.Selection.Text;*/
                     parameterValues[i] = parameterValue;
                 }
                 else
@@ -231,8 +221,7 @@ namespace PBTEditor
             if (Task.TaskType.Name == "Reference")
             {
                 var loadTask = Add(new GLButton(Gui) { Text = "Load" });
-                var name = Task.ParameterValues[0];
-                loadTask.Click += (s, e) => Editor.ShowPBT(name);
+                loadTask.Click += (s, e) => Editor.ShowPBT(Task.ParameterValues[0]);
             }
 
             // ###below###

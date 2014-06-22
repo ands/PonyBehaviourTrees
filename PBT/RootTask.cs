@@ -30,15 +30,7 @@ namespace PBT
             this.name = name;
 
             string path = Path.Combine(context.BaseDirectory, this.name + ".pbt");
-            try
-            {
-                rootTask = Parser.Parse(path, this.name, context);
-            }
-            catch (Exception e)
-            {
-                context.Log.Error("Error while loading {0}:\n{1}", path, e);
-                rootTask = null;
-            }
+            rootTask = Parser.Parse(path, this.name, context);
 
             this.name = this.name.TrimStart('.', '/'); // remove "./" from the beginning if it exists
             if (!active.ContainsKey(this.name))
@@ -60,7 +52,10 @@ namespace PBT
         /// <returns>Returns true if the task/subtree is ready and can be started; otherwise, false.</returns>
         public override bool CheckConditions()
         {
-            return rootTask != null && rootTask.CheckConditions();
+            lock (rootTask)
+            {
+                return rootTask.CheckConditions();
+            }
         }
 
         /// <summary>
@@ -68,9 +63,10 @@ namespace PBT
         /// </summary>
         public override void Start()
         {
-            if (rootTask == null)
-                return;
-            rootTask.SafeStart();
+            lock (rootTask)
+            {
+                rootTask.SafeStart();
+            }
         }
 
         /// <summary>
@@ -78,9 +74,10 @@ namespace PBT
         /// </summary>
         public override void End()
         {
-            if (rootTask == null)
-                return;
-            rootTask.SafeEnd();
+            lock (rootTask)
+            {
+                rootTask.SafeEnd();
+            }
         }
 
         /// <summary>
@@ -88,12 +85,13 @@ namespace PBT
         /// </summary>
         public override void DoAction()
         {
-            if (rootTask == null)
-                Finish();
-            if (rootTask.Finished)
-                Finish();
-            else
-                rootTask.DoAction(); 
+            lock (rootTask)
+            {
+                if (rootTask.Finished)
+                    Finish();
+                else
+                    rootTask.DoAction();
+            }
         }
 
         /// <summary>
@@ -102,34 +100,39 @@ namespace PBT
         /// <param name="timeSeconds">The current game time in seconds.</param>
         public void Update(double timeSeconds)
         {
-            if (rootTask == null)
-                return;
-
-            Context.Time = timeSeconds;
-            if (!Started)
+            lock (rootTask)
             {
-                if (CheckConditions())
-                    SafeStart();
+                Context.Time = timeSeconds;
+                if (!Started)
+                {
+                    if (CheckConditions())
+                        SafeStart();
+                }
+                else if (Finished)
+                    End();
+                else
+                    DoAction();
             }
-            else if (Finished)
-                End();
-            else
-                DoAction();
         }
 
         private bool ReplacePBT(byte[] pbt)
         {
             try
             {
-                SafeEnd();
-                Context.ResetForUpdate();
-                rootTask = Parser.Parse(pbt, this.name + ".pbt", Context);
+                lock (rootTask)
+                {
+                    if (Started && !Finished)
+                    {
+                        SafeEnd();
+                        Finish();
+                    }
+                    rootTask = Parser.Parse(pbt, this.name + ".pbt", Context);
+                }
                 return true;
             }
             catch (Exception e)
             {
                 Context.Log.Error("Error while loading {0}:\n{1}", this.name + ".pbt", e);
-                rootTask = null;
                 return false;
             }
         }
@@ -146,6 +149,7 @@ namespace PBT
                 foreach (var reference in active[name])
                     if (!reference.ReplacePBT(pbt))
                         return false;
+            GC.Collect();
             return true;
         }
 	}

@@ -10,9 +10,19 @@ namespace PBTExample
     public class Simulation
     {
         /// <summary>
-        /// Holds our independant actors.
+        /// A source for random numbers.
         /// </summary>
-        public Actor[] actors = new Actor[64];
+        public readonly Random Random = new Random();
+
+        /// <summary>
+        /// The size of the simulated world.
+        /// </summary>
+        public readonly Size WorldSize;
+
+        /// <summary>
+        /// The independant actors in our simulation.
+        /// </summary>
+        public Actor[] Actors = new Actor[256];
 
         private DateTime start;
 
@@ -22,9 +32,21 @@ namespace PBTExample
         /// <param name="control"></param>
         public Simulation(Control control)
         {
-            for (int i = 0; i < actors.Length; i++)
-                actors[i] = new Actor(new Point((i / 8) * (control.ClientSize.Width / 8), (i % 8) * (control.ClientSize.Height / 8)));
+            WorldSize = control.ClientSize;
 
+            for (int i = 0; i < Actors.Length; i++)
+                Actors[i] = new Actor(this, new Point((i / 16) * (control.ClientSize.Width / 16), (i % 16) * (control.ClientSize.Height / 16)));
+
+            start = DateTime.Now;
+        }
+
+        /// <summary>
+        /// Resets the simulation.
+        /// </summary>
+        public void Reset()
+        {
+            for (int i = 0; i < Actors.Length; i++)
+                Actors[i].Reset();
             start = DateTime.Now;
         }
 
@@ -37,23 +59,23 @@ namespace PBTExample
         {
             double time = (DateTime.Now - start).TotalSeconds;
 
-            for (int i = 0; i < actors.Length; i++)
+            for (int i = 0; i < Actors.Length; i++)
             {
                 // send collision impulses to colliding actors
-                for (int j = i + 1; j < actors.Length; j++)
+                for (int j = i + 1; j < Actors.Length; j++)
                 {
-                    float dx = actors[i].X - actors[j].X;
-                    float dy = actors[i].Y - actors[j].Y;
-                    float sij = actors[i].Size + actors[j].Size;
+                    float dx = Actors[i].X - Actors[j].X;
+                    float dy = Actors[i].Y - Actors[j].Y;
+                    float sij = Actors[i].Size + Actors[j].Size;
                     if(dx * dx + dy * dy <= sij * sij)
                     {
-                        actors[i].AI.Context.OnImpulse(ActorImpulses.Collision, this, actors[j]);
-                        actors[j].AI.Context.OnImpulse(ActorImpulses.Collision, this, actors[i]);
+                        Actors[i].AI.Context.OnImpulse(ActorImpulses.Collision, this, Actors[j]);
+                        Actors[j].AI.Context.OnImpulse(ActorImpulses.Collision, this, Actors[i]);
                     }
                 }
 
                 // let all actors do their thing
-                actors[i].Update(g, time);
+                Actors[i].Update(g, time);
             }
         }
     }

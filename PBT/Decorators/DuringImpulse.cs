@@ -12,6 +12,7 @@ namespace PBT.Decorators
         private List<ImpulseHandle> impulses = new List<ImpulseHandle>(2);
         private ImpulseHandle active;
         private string impulse;
+        private uint impulseID;
         private Expression<string> sourceVariable;
         private Expression<string> dataVariable;
 
@@ -26,17 +27,25 @@ namespace PBT.Decorators
         public DuringImpulse(TaskContext<DataType> context, Task<DataType> task, Expression<string> impulse, Expression<string> sourceVariable, Expression<string> dataVariable)
             : base(context, task)
 		{
-            uint i = Convert.ToUInt32(Enum.Parse(context.ImpulseType, impulse));
+            this.impulseID = Convert.ToUInt32(Enum.Parse(context.ImpulseType, impulse));
             this.impulse = impulse;
             this.sourceVariable = sourceVariable;
             this.dataVariable = dataVariable;
 
             List<IImpulseHandler> handler;
-            if (context.ImpulseHandler.TryGetValue(i, out handler))
+            if (context.ImpulseHandler.TryGetValue(impulseID, out handler))
                 handler.Add(this);
             else
-                context.ImpulseHandler.Add(i, new List<IImpulseHandler>() { this });
+                context.ImpulseHandler.Add(impulseID, new List<IImpulseHandler>() { this });
 		}
+
+        /// <summary>
+        /// The destructor.
+        /// </summary>
+        ~DuringImpulse()
+        {
+            Context.ImpulseHandler[impulseID].Remove(this);
+        }
 
         /// <summary>
         /// Will be executed frequently to check whether this task/subtree is ready to run.

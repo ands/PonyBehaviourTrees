@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing.Drawing2D;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace PBTExample
 {
@@ -20,6 +21,7 @@ namespace PBTExample
             SetStyle(ControlStyles.UserPaint, true);
             SetStyle(ControlStyles.AllPaintingInWmPaint, true);
             SetStyle(ControlStyles.DoubleBuffer, true);
+            BackColor = Color.Black;
 
             simulation = new Simulation(this);
 
@@ -41,12 +43,19 @@ namespace PBTExample
 
         private void restartToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            simulation = new Simulation(this);
+            simulation.Reset();
         }
 
-        private void inspectPBTOfFirstActorToolStripMenuItem_Click(object sender, EventArgs e)
+        private void MainForm_MouseUp(object sender, MouseEventArgs e)
         {
-            new PBTInspector.PBTInspectorForm<Actor, ActorImpulses>(simulation.actors[0].AI).Show();
+            foreach (var actor in simulation.Actors)
+            {
+                if ((actor.X - e.X) * (actor.X - e.X) + (actor.Y - e.Y) * (actor.Y - e.Y) < actor.Size * actor.Size)
+                {
+                    new PBTInspector.PBTInspectorForm<Actor, ActorImpulses>(actor.AI).Show();
+                    return;
+                }
+            }
         }
     }
 }
