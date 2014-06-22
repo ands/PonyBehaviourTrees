@@ -1,10 +1,10 @@
 PonyBehaviourTrees (PBT)
 ========================
 
-PBT is a set of libraries to create and execute powerful artificial intelligences for games.
-It is based on the idea behind "Behaviour Trees" while also offering C# scripting inside tree nodes.
-It comes with an easy to use editor library to play with and develop your behaviour trees while your game is running
-and an inspection library to see what's going on in your AI while it is executed.
+PBT is a set of libraries to create, execute and inspect behaviour trees.
+These are often used to create artificial intelligences for games.
+The possibility of editing the PBTs while the application is running,
+C# scripting inside nodes and runtime inspection makes this a flexible and powerful tool.
 
 ![PBT Editor](http://andsz.de/i/20140622030049456.png)
 ![PBT Inspector](http://andsz.de/i/20140622030929222.png)
