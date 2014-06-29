@@ -49,6 +49,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PBTTreeContainer.cs" />
     <Compile Include="PBTEnumForm.cs" />
     <Compile Include="Data\TaskTypeParameter.cs" />
     <Compile Include="Data\TaskTypes.cs" />

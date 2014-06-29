@@ -59,6 +59,7 @@
     </Compile>
     <Compile Include="PBTTaskControl.cs" />
     <Compile Include="PBTTaskTreeControl.cs" />
+    <Compile Include="PBTTreeContainer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

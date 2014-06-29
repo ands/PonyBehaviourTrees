@@ -204,11 +204,7 @@ namespace PBTEditor
                 Anchor = GLAnchorStyles.All
             });
 
-            TreeContainer = verticalSplitter.Add(new GLScrollableControl(glGui) { Anchor = GLAnchorStyles.All });
-            var pbtTreeControlSkin = TreeContainer.Skin;
-            pbtTreeControlSkin.BackgroundColor = System.Drawing.Color.FromArgb(96, 96, 96);
-			pbtTreeControlSkin.BorderColor = glGui.Skin.FormActive.BorderColor;
-            TreeContainer.Skin = pbtTreeControlSkin;
+            TreeContainer = verticalSplitter.Add(new PBTTreeContainer(glGui));
 
             var sidebarFlow = verticalSplitter.Add(new GLFlowLayout(glGui) { FlowDirection = GLFlowDirection.TopDown });
             var sidebarSkin = sidebarFlow.Skin;
