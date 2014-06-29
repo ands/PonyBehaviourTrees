@@ -256,22 +256,13 @@ namespace PBTEditor
 		}
 
         /// <summary>
-        /// Allow to handle some input keys that are needed by GLGUI.
+        /// Allow to handle all input keys. They are needed by GLGUI.
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
         protected override bool IsInputKey(Keys key)
         {
-            switch (key)
-            {
-                case Keys.Up:
-                case Keys.Down:
-                case Keys.Right:
-                case Keys.Left:
-                case Keys.Tab:
-                    return true;
-            }
-            return base.IsInputKey(key);
+            return true;
         }
 	}
 }
