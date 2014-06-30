@@ -43,7 +43,8 @@ namespace PBT
         /// </summary>
         ~RootTask()
         {
-            active[name].Remove(this);
+            if (active.ContainsKey(name))
+                active[name].Remove(this);
         }
 
         /// <summary>
