@@ -13,7 +13,7 @@ namespace PBTEditor
         public readonly PBTTaskTreeControl TaskTreeControl;
         public readonly Data.Task Task;
 
-        private GLLabel title;
+        internal GLLabel title;
         private GLLabel description;
         private GLLabel[] parameterTitles;
         private GLControl[] parameterValues;

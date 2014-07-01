@@ -16,7 +16,8 @@ namespace PBTInspector
     public class PBTInspectorControl<DataType, ImpulseType> : OpenTK.GLControl
 	{
         internal readonly PBT.RootTask<DataType> Root;
-        internal GLScrollableControl TreeContainer { get; private set; }
+        internal PBTTreeContainer TreeContainer { get; private set; }
+        internal PBTOverviewControl<DataType> Overview { get; private set; }
 
         GLGui glGui;
         GLDataControl dataControl;
@@ -85,7 +86,13 @@ namespace PBTInspector
             dataControl = horizontalSplitter.Add(new GLDataControl(glGui));
             dataControl.SetData(Root.Context.Data);
 
-            var impulseLogScroll = horizontalSplitter.Add(new GLScrollableControl(glGui));
+            var horizontalSplitter2 = horizontalSplitter.Add(new GLSplitLayout(glGui)
+            {
+                Orientation = GLSplitterOrientation.Horizontal,
+                SplitterPosition = 0.5f
+            });
+
+            var impulseLogScroll = horizontalSplitter2.Add(new GLScrollableControl(glGui));
             impulseLog = impulseLogScroll.Add(new GLLabel(glGui) { Multiline = true, AutoSize = true });
             var impulseLogSkin = impulseLog.SkinEnabled;
             impulseLogSkin.Font = monospaceFont;
@@ -94,6 +101,8 @@ namespace PBTInspector
             impulseLogger = new PBTImpulseLogger<DataType, ImpulseType>(new LabelWriter(impulseLog), Root.Context);
             HandleDestroyed += (s, ev) => impulseLogger.Dispose();
             filter.Click += (s, ev) => glGui.Add(new PBTImpulseFilterForm<DataType, ImpulseType>(glGui, impulseLogger));
+
+            Overview = horizontalSplitter2.Add(new PBTOverviewControl<DataType>(glGui, TreeContainer));
 
             Resize += (s, ev) => { MakeCurrent(); GL.Viewport(ClientSize); };
             Paint += OnRender;

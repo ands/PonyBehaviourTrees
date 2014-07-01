@@ -47,8 +47,10 @@ namespace PBTEditor
                 int dy = e.Y - dragStart.Y;
                 int sx = scrollStart.X - dx;
                 int sy = scrollStart.Y - dy;
-                Horizontal.Value = Math.Max(0.0f, Math.Min(1.0f, sx / (float)ScrollFreedom.Width));
-                Vertical.Value = Math.Max(0.0f, Math.Min(1.0f, sy / (float)ScrollFreedom.Height));
+                if (Horizontal.Enabled)
+                    Horizontal.Value = Math.Max(0.0f, Math.Min(1.0f, sx / (float)ScrollFreedom.Width));
+                if (Vertical.Enabled)
+                    Vertical.Value = Math.Max(0.0f, Math.Min(1.0f, sy / (float)ScrollFreedom.Height));
                 Invalidate();
             }
         }

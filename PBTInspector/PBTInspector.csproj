@@ -57,6 +57,7 @@
     <Compile Include="PBTInspectorForm.cs">
       <SubType>Form</SubType>
     </Compile>
+    <Compile Include="PBTOverviewControl.cs" />
     <Compile Include="PBTTaskControl.cs" />
     <Compile Include="PBTTaskTreeControl.cs" />
     <Compile Include="PBTTreeContainer.cs" />

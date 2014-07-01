@@ -40,7 +40,8 @@ namespace PBTEditor
         /// </summary>
         public readonly Type ImpulseType;
 
-        internal GLScrollableControl TreeContainer { get; private set; }
+        internal PBTTreeContainer TreeContainer { get; private set; }
+        internal PBTOverviewControl Overview { get; private set; }
         internal Data.TaskTypes TaskTypes;
         internal Data.Task RootTask;
         internal Data.Task Clipboard;
@@ -228,13 +229,19 @@ namespace PBTEditor
 
             var fileListTitle = sidebarFlow.Add(new GLLabel(glGui) { Text = "Load:", AutoSize = true });
 
-            var fileListScrollable = sidebarFlow.Add(new GLScrollableControl(glGui)
+            var horizontalSplitter = sidebarFlow.Add(new GLSplitLayout(glGui)
             {
+                Orientation = GLSplitterOrientation.Horizontal,
+                SplitterPosition = 0.8f,
                 Size = new Size(sidebarFlow.InnerWidth, sidebarFlow.InnerHeight - fileListTitle.Outer.Bottom),
                 Anchor = GLAnchorStyles.All
             });
+
+            var fileListScrollable = horizontalSplitter.Add(new GLScrollableControl(glGui));
             fileList = fileListScrollable.Add(new GLFlowLayout(glGui) { FlowDirection = GLFlowDirection.TopDown, AutoSize = true });
             UpdatePBTFileList();
+
+            Overview = horizontalSplitter.Add(new PBTOverviewControl(glGui, TreeContainer));
 
             Resize += (s, ev) => { MakeCurrent(); GL.Viewport(ClientSize); };
             Paint += OnRender;
