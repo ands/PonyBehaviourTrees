@@ -47,7 +47,7 @@ namespace PBTEditor.Data
 			Name = name;
             string[] values = type.Split(';');
             Type = values[0];
-            if (values.Length > 0)
+            if (values.Length > 1)
                 Summary = values[1];
 			ShortType = Type.Substring(Type.LastIndexOf(".") + 1).TrimEnd(']');
 		}
