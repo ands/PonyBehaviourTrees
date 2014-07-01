@@ -31,6 +31,11 @@ namespace PBTEditor.Data
         /// Gets a value that indicates whether the parameter type is an enum or not. 
         /// </summary>
 		public bool IsEnum { get { return EnumType != null; } }
+
+        /// <summary>
+        /// The documentation summary for this parameter.
+        /// </summary>
+        public string Summary;
 		
         /// <summary>
         /// The task type parameter constructor.
@@ -40,7 +45,10 @@ namespace PBTEditor.Data
 		public TaskTypeParameter(string name, string type)
 		{
 			Name = name;
-			Type = type;
+            string[] values = type.Split(';');
+            Type = values[0];
+            if (values.Length > 0)
+                Summary = values[1];
 			ShortType = Type.Substring(Type.LastIndexOf(".") + 1).TrimEnd(']');
 		}
 	}

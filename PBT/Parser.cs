@@ -14,41 +14,6 @@ namespace PBT
     /// </summary>
 	public static class Parser
     {
-        // tries to resolve a type from its name.
-        // the type may have a generic parameter which is filled in with the specified type
-		internal static Type GetType(string name, Type genericParam)
-		{
-            // try to get the type directly
-			var type = Type.GetType(name);
-            // try to get the same type with one generic parameter
-			if(type == null)
-				type = Type.GetType(name + "`1");
-            // if everything fails, try the same in all assemblies separately
-            if (type == null)
-            {
-                foreach (Assembly assembly in AppDomain.CurrentDomain.GetAssemblies())
-                {
-                    type = assembly.GetType(name);
-                    if (type != null)
-                        break;
-                    type = assembly.GetType(name + "`1");
-                    if (type != null)
-                        break;
-                }
-            }
-
-            if (type == null)
-                throw new Exception(string.Format("Type \"{0}\" not found!", name));
-
-            // add the generic parameter to types that ask for one
-			if(type.IsGenericTypeDefinition)
-			{
-                Type[] typeArgs = { genericParam };
-				type = type.MakeGenericType(typeArgs);
-			}
-			return type;
-		}
-
         // cache of all the type converters, that we've seen
         private static Dictionary<Type, TypeConverter> TypeConverters = new Dictionary<Type, TypeConverter>();
 
@@ -152,7 +117,7 @@ namespace PBT
 		{
 			int depth = reader.Depth;
 			
-			var type = GetType(reader.Name, typeof(DataType));
+			var type = Utils.GetType(reader.Name, typeof(DataType));
 			var constructor = type.GetConstructors()[0];
 			List<object> parameters = new List<object>() { context };
 			

@@ -24,7 +24,7 @@ namespace PBT
             {
                 if (reader.NodeType == XmlNodeType.Element)
                 {
-                    Type t = Parser.GetType(reader.Name, dataType);
+                    Type t = Utils.GetType(reader.Name, dataType);
                     if (t == null)
                         return false;
                     while (t != null && t.Name != taskType.Name)

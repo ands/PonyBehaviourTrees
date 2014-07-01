@@ -21,6 +21,11 @@ namespace PBTEditor.Data
 		public string Name;
 
         /// <summary>
+        /// The documentation summary for this task type.
+        /// </summary>
+        public string Summary;
+
+        /// <summary>
         /// The parameters for this task type.
         /// </summary>
 		public List<TaskTypeParameter> Parameters = new List<TaskTypeParameter>();
@@ -43,8 +48,13 @@ namespace PBTEditor.Data
 			
 			if(reader.HasAttributes)
 			{
-				while (reader.MoveToNextAttribute())
-					Parameters.Add(new TaskTypeParameter(reader.Name, reader.Value));
+                while (reader.MoveToNextAttribute())
+                {
+                    if (reader.Name == "_doc_")
+                        Summary = reader.Value;
+                    else
+                        Parameters.Add(new TaskTypeParameter(reader.Name, reader.Value));
+                }
 				reader.MoveToElement();
 			}
 		}

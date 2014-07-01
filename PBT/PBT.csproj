@@ -37,12 +37,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Documentation.cs" />
     <Compile Include="RootTask.cs" />
     <Compile Include="Decorators\While.cs" />
     <Compile Include="Decorators\If.cs" />
     <Compile Include="ILogger.cs" />
     <Compile Include="IImpulseHandler.cs" />
     <Compile Include="ImpulseHandle.cs" />
+    <Compile Include="Utils.cs" />
     <Compile Include="VariableStorage.cs" />
     <Compile Include="TypeExporter.cs" />
     <Compile Include="Compatibility.cs" />

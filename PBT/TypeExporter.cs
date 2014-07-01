@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
@@ -29,7 +30,7 @@ namespace PBT
                 {
                     foreach (var type in assembly.GetTypes())
                     {
-                        if (type.BaseType != null)
+                        if (type.BaseType != null && type != typeof(RootTask<>))
                         {
                             Type t = type.BaseType;
                             while (t != null && t.Name != parentType.Name)
@@ -40,8 +41,22 @@ namespace PBT
                             if (!genericType.IsGenericParameter && genericType != dataType)
                                 continue;
 
-                            var parameters = type.GetConstructors()[0].GetParameters();
+                            var constructor = type.GetConstructors()[0];
+                            var parameters = constructor.GetParameters();
                             writer.WriteStartElement(CleanTypeName(type));
+
+                            try
+                            {
+                                var typeDoc = Documentation.Get(type);
+                                writer.WriteAttributeString("_doc_", typeDoc["summary"].InnerText.Replace("\r\n            ", "\n").Trim('\r', '\n', ' '));
+                            } catch { }
+
+                            XmlElement[] paramsDoc = null;
+                            try
+                            {
+                                paramsDoc = Documentation.Get(constructor).Cast<XmlElement>().Where(e => e.Name == "param").ToArray();
+                            } catch { }
+
                             for (int i = skip; i < parameters.Length; i++)
                             {
                                 Type unwrappedType = Expression.UnwrapType(parameters[i].ParameterType);
@@ -49,7 +64,14 @@ namespace PBT
                                     unwrappedType = impulseType;
                                 if (unwrappedType.IsEnum || unwrappedType.GetInterface("ICustomEnum") != null)
                                     enums.Add(unwrappedType);
-                                writer.WriteAttributeString(parameters[i].Name, unwrappedType.ToString());
+                                string value = unwrappedType.ToString();
+                                if (paramsDoc != null)
+                                {
+                                    var paramDoc = paramsDoc.FirstOrDefault(p => p.Attributes["name"].Value == parameters[i].Name);
+                                    if (paramDoc != null)
+                                        value += ";" + paramDoc.InnerText.Replace("\r\n            ", "\n").Trim('\r', '\n', ' ');
+                                }
+                                writer.WriteAttributeString(parameters[i].Name, value);
                             }
                             writer.WriteEndElement();
                         }

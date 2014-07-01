@@ -136,7 +136,7 @@ namespace PBTEditor
                 var p = Editor.TreeContainer.ScrollPosition;
                 Editor.TreeContainer.Add(new PBTTaskBrowserForm(Gui, Editor, callback, leafTasksSelectable)
                 {
-                    Location = new Point(p.X + t.Width / 2 - 200, p.Y + t.Height / 2 - 150)
+                    Location = new Point(p.X + t.Width / 2 - 200, p.Y + t.Height / 2 - 225)
                 });
             };
             return button;

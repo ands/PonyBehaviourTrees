@@ -30,14 +30,22 @@ namespace PBTEditor
         /// </summary>
         public event PBTUpdateHandler PBTUpdate;
 
+        /// <summary>
+        /// The type of the pbt-controlled entity.
+        /// </summary>
+        public readonly Type DataType;
+
+        /// <summary>
+        /// The type of the used impulse enum.
+        /// </summary>
+        public readonly Type ImpulseType;
+
         internal GLScrollableControl TreeContainer { get; private set; }
         internal Data.TaskTypes TaskTypes;
         internal Data.Task RootTask;
         internal Data.Task Clipboard;
 
         GLGui glGui;
-
-        Type dataType, impulseType;
         string pbtSearchPath;
         GLFlowLayout fileList;
         GLButton reload, save, create;
@@ -55,8 +63,8 @@ namespace PBTEditor
 		{
 			this.Load += OnLoad;
 
-            this.dataType = dataType;
-            this.impulseType = impulseType;
+            this.DataType = dataType;
+            this.ImpulseType = impulseType;
             this.pbtSearchPath = pbtSearchPath;
 
             LoadPBTTypes();
@@ -87,7 +95,7 @@ namespace PBTEditor
             writer.Indentation = 2;
             try
             {
-                PBT.TypeExporter.ExportAllTaskTypes(dataType, impulseType, writer);
+                PBT.TypeExporter.ExportAllTaskTypes(DataType, ImpulseType, writer);
             }
             catch (ReflectionTypeLoadException re)
             {
@@ -95,7 +103,7 @@ namespace PBTEditor
                 foreach (var type in re.LoaderExceptions)
                     sb.AppendLine(type.ToString());
                 MessageBox.Show(string.Format("PBTEditorControl<{0}, {1}> : ReflectionTypeLoadException. Could not load the following types: {2}",
-                    dataType, impulseType, sb.ToString()), "Error during type loading", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    DataType, ImpulseType, sb.ToString()), "Error during type loading", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
             writer.Close();
 
