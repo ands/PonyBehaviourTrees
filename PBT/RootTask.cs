@@ -17,7 +17,7 @@ namespace PBT
 
         private string name;
         private Task<DataType> rootTask;
-        private static Dictionary<string, List<RootTask<DataType>>> active = new Dictionary<string, List<RootTask<DataType>>>(StringComparer.Ordinal);
+        private static Dictionary<string, List<WeakReference>> active = new Dictionary<string, List<WeakReference>>(StringComparer.Ordinal);
 
         /// <summary>
         /// The constructor executed by the parser.
@@ -34,8 +34,8 @@ namespace PBT
 
             this.name = this.name.TrimStart('.', '/'); // remove "./" from the beginning if it exists
             if (!active.ContainsKey(this.name))
-                active.Add(this.name, new List<RootTask<DataType>>());
-            active[this.name].Add(this);
+                active.Add(this.name, new List<WeakReference>());
+            active[this.name].Add(new WeakReference(this, false));
 		}
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace PBT
         ~RootTask()
         {
             if (active.ContainsKey(name))
-                active[name].Remove(this);
+                active[name].RemoveAll(wr => !wr.IsAlive || wr.Target == this);
         }
 
         /// <summary>
@@ -148,7 +148,7 @@ namespace PBT
         {
             if (active.ContainsKey(name))
                 foreach (var reference in active[name])
-                    if (!reference.ReplacePBT(pbt))
+                    if (reference.IsAlive && !((RootTask<DataType>)reference.Target).ReplacePBT(pbt))
                         return false;
             GC.Collect();
             return true;
