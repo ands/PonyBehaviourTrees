@@ -1,5 +1,6 @@
 ﻿using System;
 using System.CodeDom.Compiler;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -20,8 +21,8 @@ namespace PBT
         private static string paramTemplate = "var {0} = ({1})executionParams[executionParam++];";
         private static CSharpCodeProvider compiler = new CSharpCodeProvider(new Dictionary<string, string> { { "CompilerVersion", "v4.0" } });
 
-        private static Dictionary<string, Action<object[]>> actionCache = new Dictionary<string, Action<object[]>>();
-        private static Dictionary<string, Func<object[], object>> funcCache = new Dictionary<string, Func<object[], object>>();
+        private static ConcurrentDictionary<string, Action<object[]>> actionCache = new ConcurrentDictionary<string, Action<object[]>>();
+        private static ConcurrentDictionary<string, Func<object[], object>> funcCache = new ConcurrentDictionary<string, Func<object[], object>>();
 
         [DebuggerStepThrough]
         private static object Compile(string[] usingsList, string returnType, string expressionString, string[] parameterNames, object[] parameterValues)
@@ -120,13 +121,12 @@ namespace PBT
         [DebuggerStepThrough]
         public static Expression Compile(string[] usings, string expressionString, string[] parameterNames, object[] parameterValues)
         {
-            Action<object[]> execute;
-            if (!actionCache.TryGetValue(expressionString, out execute))
-            {
-                object instance = Compile(usings, "void", expressionString, parameterNames, parameterValues);
-                execute = (Action<object[]>)Delegate.CreateDelegate(typeof(Action<object[]>), instance, "Execute");
-                actionCache.Add(expressionString, execute);
-            }
+            Action<object[]> execute = 
+                actionCache.GetOrAdd(expressionString, s =>
+                {
+                    object instance = Compile(usings, "void", expressionString, parameterNames, parameterValues);
+                    return (Action<object[]>) Delegate.CreateDelegate(typeof (Action<object[]>), instance, "Execute");
+                });
             return new Expression(expressionString, execute, parameterValues);
         }
 
@@ -142,23 +142,28 @@ namespace PBT
         [DebuggerStepThrough]
         public static Expression<ReturnType> Compile<ReturnType>(string[] usings, string expressionString, string[] parameterNames, object[] parameterValues)
         {
-            Func<object[], object> execute;
-            if (!funcCache.TryGetValue(expressionString, out execute))
-            {
-                if (typeof(ReturnType).GetInterface("ICustomEnum") != null)
+            Func<object[], object> execute =
+                funcCache.GetOrAdd(expressionString, s =>
                 {
-                    object instance = Compile(usings, "int", expressionString, parameterNames, parameterValues);
-                    var exec = (Func<object[], int>)Delegate.CreateDelegate(typeof(Func<object[], int>), instance, "Execute");
-                    var conv = (Func<int, ReturnType>)Delegate.CreateDelegate(typeof(Func<int, ReturnType>), typeof(ReturnType), "FromValue");
-                    execute = o => conv(exec(o));
-                }
-                else
-                {
-                    object instance = Compile(usings, "object", expressionString, parameterNames, parameterValues);
-                    execute = (Func<object[], object>)Delegate.CreateDelegate(typeof(Func<object[], object>), instance, "Execute");
-                }
-                funcCache.Add(expressionString, execute);
-            }
+                    if (typeof (ReturnType).GetInterface("ICustomEnum") != null)
+                    {
+                        object instance = Compile(usings, "int", expressionString, parameterNames, parameterValues);
+                        var exec =
+                            (Func<object[], int>)
+                                Delegate.CreateDelegate(typeof (Func<object[], int>), instance, "Execute");
+                        var conv =
+                            (Func<int, ReturnType>)
+                                Delegate.CreateDelegate(typeof (Func<int, ReturnType>), typeof (ReturnType), "FromValue");
+                        return o => conv(exec(o));
+                    }
+                    else
+                    {
+                        object instance = Compile(usings, "object", expressionString, parameterNames, parameterValues);
+                        return
+                            (Func<object[], object>)
+                                Delegate.CreateDelegate(typeof (Func<object[], object>), instance, "Execute");
+                    }
+                });
             return new Expression<ReturnType>(expressionString, execute, parameterValues);
         }
 
