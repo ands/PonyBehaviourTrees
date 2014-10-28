@@ -1,10 +1,11 @@
 PonyBehaviourTrees (PBT)
 ========================
 
-PBT is a set of libraries to create, execute and inspect behaviour trees.
-These are often used to create artificial intelligences for games.
-The possibility of editing the PBTs while the application is running,
-C# scripting inside nodes and runtime inspection makes this a flexible and powerful tool.
+Behaviour trees are often used to create artificial intelligences for games.
+
+PBT is a set of libraries to create, execute and inspect behaviour trees while your application is running.
+
+C# scripting in tree nodes makes this a flexible and powerful tool.
 
 ![PBT Editor](http://andsz.de/i/20140622030049456.png)
 ![PBT Inspector](http://andsz.de/i/20140622030929222.png)
@@ -22,15 +23,7 @@ Resources
 - http://en.wikipedia.org/wiki/Behavior_Trees
 
 
-TODO
-====
-
-- Write: "Getting Started"
-- Write: "How to implement my own Tasks"
-
-
 Known Issues
 ============
 
-- OpenGL context switching is used incorrectly somewhere. This is sometimes breaking the fonts if multiple inspector/editor windows were opened.
-- If a script can not be compiled anymore (during program start), it will throw an exception on each PBT instance that is using it. Not sure how to solve this...
+- OpenGL context switching issue: inspector/editor fonts sometimes disappear if multiple windows were opened.
