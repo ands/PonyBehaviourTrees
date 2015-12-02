@@ -14,6 +14,7 @@ C# scripting in tree nodes makes this a flexible and powerful tool.
 Resources
 =========
 
+- https://gamedevdaily.io/managing-ai-in-gigantic-523dc84763cf#.i8ksed2nu
 - http://aigamedev.com/open/article/bt-overview/
 - http://www.altdev.co/2011/02/24/introduction-to-behavior-trees/
 - http://magicscrollsofcode.blogspot.de/2010/12/behavior-trees-by-example-ai-in-android.html
